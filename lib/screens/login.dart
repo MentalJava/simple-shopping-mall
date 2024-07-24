@@ -27,25 +27,27 @@ class Login extends StatelessWidget {
                 width: Get.width,
               ),
             ),
-            Obx(() {
-              if (googleAuthController.isLoading.value) {
-                return const CircularProgressIndicator();
-              } else {
-                return LoginButton(
-                  logoColor: const Color.fromARGB(255, 255, 154, 154),
-                  title: 'GOOGLE',
-                  backgroundColor: const Color.fromARGB(255, 229, 115, 115),
-                  icon: const Icon(
-                    Icons.g_mobiledata_outlined,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  onClickEvent: () {
-                    googleAuthController.loginWithGoogle();
-                  },
-                );
-              }
-            }),
+            Obx(
+              () {
+                if (googleAuthController.isLoading.value) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return LoginButton(
+                    logoColor: const Color.fromARGB(255, 255, 154, 154),
+                    title: 'GOOGLE',
+                    backgroundColor: const Color.fromARGB(255, 229, 115, 115),
+                    icon: const Icon(
+                      Icons.g_mobiledata_outlined,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onClickEvent: () {
+                      googleAuthController.loginWithGoogle();
+                    },
+                  );
+                }
+              },
+            ),
             const SizedBox(
               height: 20,
             ),

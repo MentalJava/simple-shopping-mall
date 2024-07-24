@@ -13,6 +13,8 @@ class GoogleAuthController extends GetxController {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
         isLoading.value = false;
+        Get.snackbar(
+            'Error', 'Google Sign-in was aborted by user'); // 사용자가 로그인을 취소한 경우
         return;
       }
       final GoogleSignInAuthentication googleAuth =
@@ -23,9 +25,9 @@ class GoogleAuthController extends GetxController {
       );
 
       await auth.signInWithCredential(credential);
-      Get.toNamed('/home');
-    } catch (e) {
-      print(e);
+      Get.offAllNamed('/home');
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar('Failed with error code : ${e.code}', '${e.message}');
     } finally {
       isLoading.value = false;
     }
