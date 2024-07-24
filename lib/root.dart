@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_shopping_mall/screens/home.dart';
 import 'package:simple_shopping_mall/screens/login.dart';
 
 class MyApp extends StatelessWidget {
@@ -13,7 +14,11 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/',
-          page: () => const Login(),
+          page: () => Login(),
+        ),
+        GetPage(
+          name: '/home',
+          page: () => const Home(),
         ),
       ],
     );

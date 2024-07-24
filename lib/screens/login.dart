@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_shopping_mall/controller/google_auth_controller.dart';
 import 'package:simple_shopping_mall/widgets/button/login_button.dart';
 
 class Login extends StatelessWidget {
-  const Login({super.key});
+  Login({super.key});
+  final googleAuthController = Get.put(GoogleAuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +27,25 @@ class Login extends StatelessWidget {
                 width: Get.width,
               ),
             ),
-            const LoginButton(
-              logoColor: Color.fromARGB(255, 255, 154, 154),
-              title: 'GOOGLE',
-              backgroundColor: Color.fromARGB(255, 229, 115, 115),
-              icon: Icon(
-                Icons.g_mobiledata_outlined,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
+            Obx(() {
+              if (googleAuthController.isLoading.value) {
+                return const CircularProgressIndicator();
+              } else {
+                return LoginButton(
+                  logoColor: const Color.fromARGB(255, 255, 154, 154),
+                  title: 'GOOGLE',
+                  backgroundColor: const Color.fromARGB(255, 229, 115, 115),
+                  icon: const Icon(
+                    Icons.g_mobiledata_outlined,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onClickEvent: () {
+                    googleAuthController.loginWithGoogle();
+                  },
+                );
+              }
+            }),
             const SizedBox(
               height: 20,
             ),
