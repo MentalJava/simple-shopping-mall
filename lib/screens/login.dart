@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_shopping_mall/controller/anonymous_auth_controller.dart';
-import 'package:simple_shopping_mall/controller/google_auth_controller.dart';
+import 'package:simple_shopping_mall/controller/auth_controller.dart';
 import 'package:simple_shopping_mall/widgets/button/login_button.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
-  final googleAuthController = Get.put(GoogleAuthController());
-  final anonymousAuthController = Get.put(AnonymousAuthController());
+  final authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,7 @@ class Login extends StatelessWidget {
             ),
             Obx(
               () {
-                if (googleAuthController.isLoading.value) {
+                if (authController.isGoogleLoading.value) {
                   return const CircularProgressIndicator();
                 } else {
                   return LoginButton(
@@ -44,7 +42,7 @@ class Login extends StatelessWidget {
                       size: 30,
                     ),
                     onClickEvent: () {
-                      googleAuthController.loginWithGoogle();
+                      authController.loginWithGoogle();
                     },
                   );
                 }
@@ -55,7 +53,7 @@ class Login extends StatelessWidget {
             ),
             Obx(
               () {
-                if (anonymousAuthController.isLoading.value) {
+                if (authController.isAnonymousLoading.value) {
                   return const CircularProgressIndicator();
                 } else {
                   return LoginButton(
@@ -67,7 +65,7 @@ class Login extends StatelessWidget {
                       color: Colors.white,
                     ),
                     onClickEvent: () {
-                      anonymousAuthController.loginWithAnonymous();
+                      authController.loginWithAnonymous();
                     },
                   );
                 }
