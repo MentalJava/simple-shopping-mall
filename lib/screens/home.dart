@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -13,7 +14,9 @@ class Home extends StatelessWidget {
         ),
         leading: IconButton(
           icon: const Icon(Icons.person),
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed('/profile');
+          },
         ),
         title: const Text(
           'Main',
