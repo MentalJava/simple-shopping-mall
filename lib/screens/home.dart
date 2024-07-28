@@ -28,7 +28,9 @@ class Home extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed('/homeAdd');
+            },
           ),
         ],
       ),
