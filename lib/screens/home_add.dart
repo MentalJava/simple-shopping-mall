@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_shopping_mall/controller/item_controller.dart';
 
 class HomeAdd extends StatelessWidget {
-  const HomeAdd({super.key});
+  final itemController = Get.put(ItemController());
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
+  HomeAdd({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,9 @@ class HomeAdd extends StatelessWidget {
         ),
         leadingWidth: 75,
         leading: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
           child: const Text(
             'Cancle',
             style: TextStyle(
@@ -32,7 +40,14 @@ class HomeAdd extends StatelessWidget {
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              itemController.uploadItem(
+                nameController.text,
+                priceController.text,
+                descriptionController.text,
+              );
+              Get.back();
+            },
             child: const Text(
               'Save',
               style: TextStyle(
@@ -47,19 +62,34 @@ class HomeAdd extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              height: 300,
-              width: Get.width,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.photo,
-                  color: Colors.grey,
-                  size: 100,
-                ),
-              ),
+            Obx(
+              () {
+                return itemController.image.value == null
+                    ? Container(
+                        height: 300,
+                        width: Get.width,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.photo,
+                            color: Colors.grey,
+                            size: 100,
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        height: 300,
+                        width: Get.width,
+                        child: Image.file(
+                          itemController.image.value!,
+                          width: Get.width,
+                          height: Get.height,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+              },
             ),
             Align(
               alignment: Alignment.topRight,
@@ -68,7 +98,9 @@ class HomeAdd extends StatelessWidget {
                   Icons.photo_camera,
                   color: Colors.black,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  itemController.pickImage();
+                },
               ),
             ),
             const SizedBox(
@@ -78,19 +110,14 @@ class HomeAdd extends StatelessWidget {
               height: 50,
               width: 300,
               child: TextFormField(
+                controller: nameController,
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
                 decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.only(
-                    bottom: 20,
-                  ),
-                  isCollapsed: true,
-                  label: Text(
-                    'Product Name',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 75, 113, 179),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  hintText: 'Product Name',
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 75, 113, 179),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -105,14 +132,13 @@ class HomeAdd extends StatelessWidget {
               height: 40,
               width: 300,
               child: TextFormField(
+                controller: priceController,
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
                 decoration: const InputDecoration(
-                  label: Text(
-                    'Price',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 102, 136, 194),
-                      fontSize: 17,
-                    ),
+                  hintText: 'Price',
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 102, 136, 194),
+                    fontSize: 17,
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -129,14 +155,13 @@ class HomeAdd extends StatelessWidget {
               height: 40,
               width: 300,
               child: TextFormField(
+                controller: descriptionController,
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
                 decoration: const InputDecoration(
-                  label: Text(
-                    'Description',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 102, 136, 194),
-                      fontSize: 17,
-                    ),
+                  hintText: 'Description',
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 102, 136, 194),
+                    fontSize: 17,
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
