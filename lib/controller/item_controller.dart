@@ -10,6 +10,7 @@ class ItemController extends GetxController {
   final ImagePicker picker = ImagePicker();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
+  final isLoading = false.obs;
 
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -25,6 +26,7 @@ class ItemController extends GetxController {
       return;
     }
 
+    isLoading.value = true;
     try {
       String fileName = DateTime.now().microsecondsSinceEpoch.toString();
       UploadTask uploadTask =
@@ -38,9 +40,12 @@ class ItemController extends GetxController {
         'description': description,
         'imageUrl': downloadUrl,
       });
+
       Get.snackbar('Success', 'Item Uploaded Successfully');
     } catch (e) {
       Get.snackbar('Error', 'Failed to upload Item');
+    } finally {
+      isLoading.value = false;
     }
   }
 }
