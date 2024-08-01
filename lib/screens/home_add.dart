@@ -100,8 +100,8 @@ class HomeAdd extends StatelessWidget {
                       Icons.photo_camera,
                       color: Colors.black,
                     ),
-                    onPressed: () {
-                      itemController.pickImage();
+                    onPressed: () async {
+                      await itemController.pickImage();
                     },
                   ),
                 ),
