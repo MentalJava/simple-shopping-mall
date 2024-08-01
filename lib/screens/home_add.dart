@@ -179,14 +179,15 @@ class HomeAdd extends StatelessWidget {
           Obx(
             () {
               if (itemController.isLoading.value) {
-                return Opacity(
-                  opacity: 0.5,
-                  child: Container(
-                    color: Colors.black,
-                    child: const Center(
+                return Stack(
+                  children: [
+                    Container(
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                    const Center(
                       child: CircularProgressIndicator(),
                     ),
-                  ),
+                  ],
                 );
               } else {
                 return Container();
