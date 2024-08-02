@@ -55,7 +55,9 @@ class ItemController extends GetxController {
       (QuerySnapshot query) {
         List<Item> items = [];
         for (var item in query.docs) {
-          items.add(Item.fromDocumentSnapshot(item));
+          items.add(
+            Item.fromDocumentSnapshot(item),
+          );
         }
         return items;
       },
