@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:simple_shopping_mall/models/item.dart';
 
 class ItemController extends GetxController {
   var image = Rxn<File>();
@@ -34,7 +35,7 @@ class ItemController extends GetxController {
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-      await firestore.collection('item').add({
+      await firestore.collection('items').add({
         'name': name,
         'price': price,
         'description': description,
@@ -47,5 +48,17 @@ class ItemController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Stream<List<Item>> getItems() {
+    return firestore.collection('items').snapshots().map(
+      (QuerySnapshot query) {
+        List<Item> items = [];
+        for (var item in query.docs) {
+          items.add(Item.fromDocumentSnapshot(item));
+        }
+        return items;
+      },
+    );
   }
 }
