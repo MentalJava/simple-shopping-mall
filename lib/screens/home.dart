@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_shopping_mall/controller/item_controller.dart';
+import 'package:simple_shopping_mall/models/item.dart';
+import 'package:simple_shopping_mall/widgets/item_grid_list.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final itemController = Get.put(ItemController());
+  Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,31 @@ class Home extends StatelessWidget {
             },
           ),
         ],
+      ),
+      body: StreamBuilder<List<Item>>(
+        stream: itemController.getItems(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text('No Items'),
+            );
+          }
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              Item item = snapshot.data![index];
+              return ItemGridList(item: item);
+            },
+          );
+        },
       ),
     );
   }
