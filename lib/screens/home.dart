@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simple_shopping_mall/controller/item_controller.dart';
 import 'package:simple_shopping_mall/models/item.dart';
-import 'package:simple_shopping_mall/widgets/item_grid_list.dart';
+import 'package:simple_shopping_mall/widgets/item/item_grid_list.dart';
 
 class Home extends StatelessWidget {
   final itemController = Get.put(ItemController());
