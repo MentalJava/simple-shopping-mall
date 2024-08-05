@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simple_shopping_mall/models/item.dart';
+import 'package:simple_shopping_mall/screens/home_detail.dart';
 
 class ItemGridList extends StatelessWidget {
   const ItemGridList({
@@ -26,11 +27,14 @@ class ItemGridList extends StatelessWidget {
             SizedBox(
               width: Get.width,
               height: 110,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  item.imageUrl,
-                  fit: BoxFit.fill,
+              child: Hero(
+                tag: item.imageUrl,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    item.imageUrl,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
@@ -68,7 +72,12 @@ class ItemGridList extends StatelessWidget {
                     right: 8,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(
+                    () => HomeDetail(item: item),
+                  );
+                },
+
                 child: const Text(
                   'more',
                   style: TextStyle(
