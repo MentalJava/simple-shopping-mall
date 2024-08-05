@@ -44,9 +44,6 @@ class HomeDetail extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Spacer(
-            flex: 1,
-          ),
           Hero(
             tag: item.imageUrl,
             child: SizedBox(
@@ -57,6 +54,9 @@ class HomeDetail extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
+          ),
+          const Spacer(
+            flex: 1,
           ),
           SizedBox(
             width: 280,
@@ -102,13 +102,13 @@ class HomeDetail extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 const Divider(
                   height: 1,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 Text(
                   item.description,
@@ -118,7 +118,7 @@ class HomeDetail extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 90,
+                  height: 100,
                 ),
                 Text.rich(
                   TextSpan(
