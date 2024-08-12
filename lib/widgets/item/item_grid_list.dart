@@ -77,7 +77,6 @@ class ItemGridList extends StatelessWidget {
                     () => HomeDetail(item: item),
                   );
                 },
-
                 child: const Text(
                   'more',
                   style: TextStyle(

@@ -7,12 +7,16 @@ class AuthController extends GetxController {
   var isAnonymousLoading = false.obs;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  var user = Rx<User?>(null);
+  final Rxn<User> _user = Rxn<User>();
+
+  User? get user => _user.value;
+  String? get uid => _user.value?.uid;
+  bool get isLoggedIn => _user.value != null;
 
   @override
   void onInit() {
     super.onInit();
-    user.value = auth.currentUser;
+    _user.bindStream(auth.authStateChanges());
   }
 
   Future<void> loginWithAnonymous() async {
