@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:simple_shopping_mall/controller/auth_controller.dart';
 import 'package:simple_shopping_mall/controller/item_controller.dart';
 import 'package:simple_shopping_mall/models/item.dart';
+import 'package:simple_shopping_mall/screens/detail_modified.dart';
 
 class HomeDetail extends StatelessWidget {
   final itemController = Get.put(ItemController());
@@ -39,7 +40,11 @@ class HomeDetail extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(
+                () => DetailModified(item: item),
+              );
+            },
             icon: const Icon(Icons.edit),
           ),
           IconButton(
