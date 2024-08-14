@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_shopping_mall/controller/auth_controller.dart';
+import 'package:simple_shopping_mall/controller/item_controller.dart';
 import 'package:simple_shopping_mall/models/item.dart';
 
 class HomeDetail extends StatelessWidget {
+  final itemController = Get.put(ItemController());
+  final AuthController authController = Get.find<AuthController>();
+
   final Item item;
-  const HomeDetail({
+
+  HomeDetail({
     super.key,
     required this.item,
   });
@@ -37,7 +43,10 @@ class HomeDetail extends StatelessWidget {
             icon: const Icon(Icons.edit),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              itemController.deleteItems(item.id);
+              Get.back();
+            },
             icon: const Icon(Icons.delete),
           ),
         ],
@@ -76,18 +85,27 @@ class HomeDetail extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.thumb_up,
-                            color: Colors.red,
+                        GetBuilder<ItemController>(
+                          init: ItemController(),
+                          builder: (_) => IconButton(
+                            onPressed: () {
+                              final user = authController.user!;
+                              itemController.toggleThumbsUp(item.id, user.uid);
+                            },
+                            icon: const Icon(
+                              Icons.thumb_up,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
-                        Text(
-                          '0',
-                          style: TextStyle(
-                            color: Colors.red[200],
-                            fontSize: 20,
+                        GetBuilder<ItemController>(
+                          init: ItemController(),
+                          builder: (_) => Text(
+                            itemController.thumbsUpCount.toString(),
+                            style: TextStyle(
+                              color: Colors.red[200],
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                       ],
@@ -141,18 +159,18 @@ class HomeDetail extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Text.rich(
+                Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: '24.08.05 17:41:00 ',
-                        style: TextStyle(
+                        text: item.createdAt.toDate().toString(),
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 15,
                         ),
                       ),
-                      TextSpan(
-                        text: 'Created',
+                      const TextSpan(
+                        text: ' Created',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 15,
@@ -162,18 +180,18 @@ class HomeDetail extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Text.rich(
+                Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: '24.08.05 17:41:00 ',
-                        style: TextStyle(
+                        text: item.updatedAt.toDate().toString(),
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 15,
                         ),
                       ),
-                      TextSpan(
-                        text: 'Modified',
+                      const TextSpan(
+                        text: ' Modified',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 15,

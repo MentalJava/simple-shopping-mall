@@ -6,6 +6,10 @@ class Item {
   String price;
   String description;
   String imageUrl;
+  Timestamp createdAt;
+  Timestamp updatedAt;
+  int thumbsUpCount;
+  Map<String, dynamic> thumbsUpByUsers;
 
   Item({
     required this.id,
@@ -13,6 +17,10 @@ class Item {
     required this.price,
     required this.description,
     required this.imageUrl,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.thumbsUpCount,
+    required this.thumbsUpByUsers,
   });
 
   factory Item.fromDocumentSnapshot(DocumentSnapshot doc) {
@@ -22,6 +30,10 @@ class Item {
       price: doc['price'],
       description: doc['description'],
       imageUrl: doc['imageUrl'],
+      createdAt: doc['createdAt'],
+      updatedAt: doc['updatedAt'],
+      thumbsUpCount: doc['thumbsUpCount'],
+      thumbsUpByUsers: doc['thumbsUpByUsers'],
     );
   }
 }

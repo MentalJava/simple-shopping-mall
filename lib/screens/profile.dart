@@ -32,12 +32,12 @@ class Profile extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (authController.user.value == null) {
+          if (authController.user == null) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
-            final user = authController.user.value!;
+            final user = authController.user!;
             return Center(
               child: SizedBox(
                 width: 250,
