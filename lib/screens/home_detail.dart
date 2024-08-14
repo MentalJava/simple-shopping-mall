@@ -85,8 +85,8 @@ class HomeDetail extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        GetBuilder(
-                          init: itemController,
+                        GetBuilder<ItemController>(
+                          init: ItemController(),
                           builder: (_) => IconButton(
                             onPressed: () {
                               final user = authController.user!;
@@ -98,8 +98,8 @@ class HomeDetail extends StatelessWidget {
                             ),
                           ),
                         ),
-                        GetBuilder(
-                          init: itemController,
+                        GetBuilder<ItemController>(
+                          init: ItemController(),
                           builder: (_) => Text(
                             itemController.thumbsUpCount.toString(),
                             style: TextStyle(

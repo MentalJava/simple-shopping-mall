@@ -14,8 +14,7 @@ class ItemController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
   final isLoading = false.obs;
-  final thumbsUpCount = 0.obs;
-  final userHasThumbsUp = false.obs;
+  var thumbsUpCount = 0;
 
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -102,9 +101,13 @@ class ItemController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
         );
       } else {
+        int newThumbsUpCount = thumbsUpCount + 1;
+
+        thumbsUpCount = newThumbsUpCount;
+
         await itemRef.update(
           {
-            'thumbsUpCount': FieldValue.increment(1),
+            'thumbsUpCount': newThumbsUpCount,
             'thumbsUpByUsers': {userId: true},
           },
         );
@@ -114,6 +117,7 @@ class ItemController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
         );
       }
+      update();
     } catch (e) {
       Get.snackbar(
         'Error',
