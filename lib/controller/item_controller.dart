@@ -14,6 +14,7 @@ class ItemController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
   final isLoading = false.obs;
+
   var thumbsUpCount = 0;
 
   Future<void> pickImage() async {
@@ -69,6 +70,45 @@ class ItemController extends GetxController {
         return items;
       },
     );
+  }
+
+  Future<void> updateItem(
+      String itemId, name, description, price, imageUrl) async {
+    try {
+      String? downloadUrl;
+
+      if (image.value != null) {
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference storageRef = storage.ref().child('images/$fileName');
+        UploadTask uploadTask = storageRef.putFile(image.value!);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      }
+
+      await firestore.collection('items').doc(itemId).update({
+        'name': name,
+        'description': description,
+        'price': price,
+        'imageUrl': downloadUrl ?? imageUrl,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      if (downloadUrl != null) {
+        imageUrl = downloadUrl;
+      }
+
+      Get.snackbar(
+        'Success',
+        'Product updated successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to update product',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   Future<void> deleteItems(String itemId) async {
