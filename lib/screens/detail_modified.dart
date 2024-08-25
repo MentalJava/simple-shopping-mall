@@ -43,8 +43,8 @@ class DetailModified extends StatelessWidget {
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () {
-              itemController.updateItem(
+            onPressed: () async {
+              await itemController.updateItem(
                 item.id,
                 item.name,
                 item.description,
