@@ -43,7 +43,16 @@ class DetailModified extends StatelessWidget {
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () async {
+              await itemController.updateItem(
+                item.id,
+                item.name,
+                item.description,
+                item.price,
+                item.imageUrl,
+              );
+              Get.back();
+            },
             child: const Text(
               'Save',
               style: TextStyle(
@@ -120,6 +129,9 @@ class DetailModified extends StatelessWidget {
                         ),
                       ),
                     ),
+                    onChanged: (value) {
+                      item.name = value;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -140,6 +152,9 @@ class DetailModified extends StatelessWidget {
                         ),
                       ),
                     ),
+                    onChanged: (value) {
+                      item.price = value;
+                    },
                   ),
                 ),
                 const SizedBox(
@@ -163,6 +178,9 @@ class DetailModified extends StatelessWidget {
                         ),
                       ),
                     ),
+                    onChanged: (value) {
+                      item.description = value;
+                    },
                   ),
                 ),
               ],
