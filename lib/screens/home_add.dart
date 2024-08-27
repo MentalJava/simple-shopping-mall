@@ -1,4 +1,6 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:simple_shopping_mall/controller/item_controller.dart';
 
@@ -133,6 +135,13 @@ class HomeAdd extends StatelessWidget {
                   height: 40,
                   width: 300,
                   child: TextFormField(
+                    inputFormatters: <TextInputFormatter>[
+                      CurrencyTextInputFormatter.currency(
+                        decimalDigits: 0,
+                        symbol: '＄ ',
+                      )
+                    ],
+                    keyboardType: TextInputType.number,
                     controller: priceController,
                     onTapOutside: (event) => FocusScope.of(context).unfocus(),
                     decoration: const InputDecoration(

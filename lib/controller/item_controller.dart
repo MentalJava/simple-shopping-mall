@@ -5,9 +5,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:simple_shopping_mall/controller/auth_controller.dart';
+import 'package:simple_shopping_mall/controller/dropdown_button_controller.dart';
+
 import 'package:simple_shopping_mall/models/item.dart';
 
 class ItemController extends GetxController {
+  final dropController = Get.put(DropdownButtonController());
   final AuthController authController = Get.find<AuthController>();
   var image = Rxn<File>();
   final ImagePicker picker = ImagePicker();
@@ -59,17 +62,36 @@ class ItemController extends GetxController {
   }
 
   Stream<List<Item>> getItems() {
-    return firestore.collection('items').snapshots().map(
-      (QuerySnapshot query) {
-        List<Item> items = [];
-        for (var item in query.docs) {
-          items.add(
-            Item.fromDocumentSnapshot(item),
-          );
-        }
-        return items;
-      },
-    );
+    switch (dropController.currentItem.value) {
+      case DropDownMenu.asc:
+        return firestore.collection('items').orderBy('price').snapshots().map(
+          (QuerySnapshot query) {
+            List<Item> items = [];
+            for (var item in query.docs) {
+              items.add(
+                Item.fromDocumentSnapshot(item),
+              );
+            }
+            return items;
+          },
+        );
+      case DropDownMenu.desc:
+        return firestore
+            .collection('items')
+            .orderBy('price', descending: true)
+            .snapshots()
+            .map(
+          (QuerySnapshot query) {
+            List<Item> items = [];
+            for (var item in query.docs) {
+              items.add(
+                Item.fromDocumentSnapshot(item),
+              );
+            }
+            return items;
+          },
+        );
+    }
   }
 
   Future<void> updateItem(
