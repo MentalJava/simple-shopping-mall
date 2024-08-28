@@ -44,31 +44,23 @@ class Home extends StatelessWidget {
         children: [
           CustomDropdownButton(),
           Expanded(
-            child: StreamBuilder<List<Item>>(
-              stream: itemController.getItems(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text('No Items'),
-                  );
-                }
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    Item item = snapshot.data![index];
-                    return ItemGridList(item: item);
-                  },
+            child: Obx(() {
+              if (itemController.items.isEmpty) {
+                return const Center(
+                  child: Text('No Items'),
                 );
-              },
-            ),
+              }
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: itemController.items.length,
+                itemBuilder: (context, index) {
+                  Item item = itemController.items[index];
+                  return ItemGridList(item: item);
+                },
+              );
+            }),
           ),
         ],
       ),

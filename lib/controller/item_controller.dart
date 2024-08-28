@@ -17,8 +17,23 @@ class ItemController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
   final isLoading = false.obs;
-
+  var items = <Item>[].obs;
   var thumbsUpCount = 0;
+
+  @override
+  void onInit() {
+    super.onInit();
+    dropController.currentItem.listen((_) {
+      fetchItems();
+    });
+    fetchItems();
+  }
+
+  void fetchItems() {
+    getItems().listen((itemList) {
+      items.value = itemList;
+    });
+  }
 
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -42,16 +57,18 @@ class ItemController extends GetxController {
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-      await firestore.collection('items').add({
-        'name': name,
-        'price': price,
-        'description': description,
-        'imageUrl': downloadUrl,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-        'thumbsUpCount': 0,
-        'thumbsUpByUsers': {},
-      });
+      await firestore.collection('items').add(
+        {
+          'name': name,
+          'price': price,
+          'description': description,
+          'imageUrl': downloadUrl,
+          'createdAt': FieldValue.serverTimestamp(),
+          'updatedAt': FieldValue.serverTimestamp(),
+          'thumbsUpCount': 0,
+          'thumbsUpByUsers': {},
+        },
+      );
 
       Get.snackbar('Success', 'Item Uploaded Successfully');
     } catch (e) {
