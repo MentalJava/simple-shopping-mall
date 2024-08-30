@@ -81,7 +81,11 @@ class ItemController extends GetxController {
   Stream<List<Item>> getItems() {
     switch (dropController.currentItem.value) {
       case DropDownMenu.asc:
-        return firestore.collection('items').orderBy('price').snapshots().map(
+        return firestore
+            .collection('items')
+            .orderBy('price', descending: false)
+            .snapshots()
+            .map(
           (QuerySnapshot query) {
             List<Item> items = [];
             for (var item in query.docs) {

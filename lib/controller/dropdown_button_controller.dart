@@ -20,5 +20,6 @@ class DropdownButtonController extends GetxController {
     var selectedItem =
         DropDownMenu.values.where((menu) => menu.index == itemIndex).first;
     currentItem(selectedItem);
+    update();
   }
 }
