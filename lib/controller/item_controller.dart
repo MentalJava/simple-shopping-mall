@@ -5,17 +5,35 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:simple_shopping_mall/controller/auth_controller.dart';
+import 'package:simple_shopping_mall/controller/dropdown_button_controller.dart';
+
 import 'package:simple_shopping_mall/models/item.dart';
 
 class ItemController extends GetxController {
+  final dropController = Get.put(DropdownButtonController());
   final AuthController authController = Get.find<AuthController>();
   var image = Rxn<File>();
   final ImagePicker picker = ImagePicker();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
   final isLoading = false.obs;
-
+  var items = <Item>[].obs;
   var thumbsUpCount = 0;
+
+  @override
+  void onInit() {
+    super.onInit();
+    dropController.currentItem.listen((_) {
+      fetchItems();
+    });
+    fetchItems();
+  }
+
+  void fetchItems() {
+    getItems().listen((itemList) {
+      items.value = itemList;
+    });
+  }
 
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -39,16 +57,18 @@ class ItemController extends GetxController {
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-      await firestore.collection('items').add({
-        'name': name,
-        'price': price,
-        'description': description,
-        'imageUrl': downloadUrl,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-        'thumbsUpCount': 0,
-        'thumbsUpByUsers': {},
-      });
+      await firestore.collection('items').add(
+        {
+          'name': name,
+          'price': price,
+          'description': description,
+          'imageUrl': downloadUrl,
+          'createdAt': FieldValue.serverTimestamp(),
+          'updatedAt': FieldValue.serverTimestamp(),
+          'thumbsUpCount': 0,
+          'thumbsUpByUsers': {},
+        },
+      );
 
       Get.snackbar('Success', 'Item Uploaded Successfully');
     } catch (e) {
@@ -59,17 +79,40 @@ class ItemController extends GetxController {
   }
 
   Stream<List<Item>> getItems() {
-    return firestore.collection('items').snapshots().map(
-      (QuerySnapshot query) {
-        List<Item> items = [];
-        for (var item in query.docs) {
-          items.add(
-            Item.fromDocumentSnapshot(item),
-          );
-        }
-        return items;
-      },
-    );
+    switch (dropController.currentItem.value) {
+      case DropDownMenu.asc:
+        return firestore
+            .collection('items')
+            .orderBy('price', descending: false)
+            .snapshots()
+            .map(
+          (QuerySnapshot query) {
+            List<Item> items = [];
+            for (var item in query.docs) {
+              items.add(
+                Item.fromDocumentSnapshot(item),
+              );
+            }
+            return items;
+          },
+        );
+      case DropDownMenu.desc:
+        return firestore
+            .collection('items')
+            .orderBy('price', descending: true)
+            .snapshots()
+            .map(
+          (QuerySnapshot query) {
+            List<Item> items = [];
+            for (var item in query.docs) {
+              items.add(
+                Item.fromDocumentSnapshot(item),
+              );
+            }
+            return items;
+          },
+        );
+    }
   }
 
   Future<void> updateItem(
